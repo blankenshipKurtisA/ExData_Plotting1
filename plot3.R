@@ -1,0 +1,12 @@
+df <- read.table(unz("exdata_data_household_power_consumption.zip","household_power_consumption.txt"), header = TRUE, sep = ";", na.strings = "?")
+df$'DateTime' <- strptime(paste(df$Date,df$Time, sep = " "),"%d/%m/%Y %H:%M:%S")
+df <- df[,!(names(df) %in% c("Date","Time"))]
+df <- subset(df,DateTime >= strptime("01/02/2007 00:00:00","%d/%m/%Y %H:%M:%S"))
+df <- subset(df,DateTime <= strptime("03/02/2007 00:00:00","%d/%m/%Y %H:%M:%S"))
+png("plot3.png")
+with(df,plot(DateTime,Sub_metering_1,type="n", xlab = "", ylab = "Energy sub metering"))
+with(df,lines(DateTime,Sub_metering_1, col = "black"))
+with(df,lines(DateTime,Sub_metering_2, col = "red"))
+with(df,lines(DateTime,Sub_metering_3, col = "blue"))
+legend("topright",lty=c(1,1,1),col=c("black","red","blue"),legend=c("Sub_metering_1","Sub_metering_2","Sub_metering_3"))
+dev.off()
